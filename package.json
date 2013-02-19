@@ -1,0 +1,18 @@
+{
+  "name": "realtime-log-visualization",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node app",
+    "devserver": "./node_modules/node-dev/node-dev app.js"
+    "generate_data": "node generate_data.js"
+  },
+  "dependencies": {
+    "express": "3.1.0",
+    "jade": "*",
+    "mongoose": "~3.5.5"
+  },
+  "devDependencies": {
+    "node-dev": "~0.2.10",
+    "request": "~2.12.0"
+  }
+}

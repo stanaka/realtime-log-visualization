@@ -1,0 +1,25 @@
+// Graph
+#chart_container {
+        position: relative;
+        font-family: Arial, Helvetica, sans-serif;
+}
+#chart {
+        position: relative;
+        left: 60px;
+}
+#y_axis {
+        position: absolute;
+        top: 8px;
+        bottom: 0;
+        width: 60px;
+}
+#legend_containter {
+        position: relative;
+	padding: 5px;
+}
+#legend {
+        position: relative;
+	margin: 10px;
+        top: 0;
+        bottom: 0;
+}

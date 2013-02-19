@@ -1,0 +1,117 @@
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='http://code.shutterstock.com/rickshaw/rickshaw.min.css')
+  body
+    block content
+
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js')
+    script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.min.js')
+    script(src='http://jquery-json.googlecode.com/files/jquery.json-2.2.min.js')
+
+    script(src='http://code.shutterstock.com/rickshaw/vendor/d3.v2.js')
+    script(src='http://code.shutterstock.com/rickshaw/rickshaw.js')
+
+    script(type='text/javascript')
+      var palette = new Rickshaw.Color.Palette();
+
+      var tv = 10;
+      var graph = new Rickshaw.Graph( {
+        element: document.getElementById("chart"),
+        width: 900,
+        height: 500,
+        renderer: 'area',
+        stroke: true,
+        series: new Rickshaw.Series.FixedDuration([{
+          name: '2xx', color: palette.color()
+        },{
+          name: '3xx', color: palette.color()
+        },{
+          name: '4xx', color: palette.color()
+        },{
+          name: '5xx', color: palette.color()
+        }], undefined, {
+          timeInterval: tv * 1000,
+          maxDataPoints: 100,
+          timeBase: new Date().getTime() / 1000
+        }) 
+      } );
+
+      var y_axis = new Rickshaw.Graph.Axis.Y( {
+        graph: graph,
+        orientation: 'left',
+        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+        element: document.getElementById('y_axis'),
+      } );
+      var legend = new Rickshaw.Graph.Legend({
+        graph: graph,
+        element: document.getElementById('legend'),
+      });
+      var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+        graph: graph,
+        legend: legend
+      });
+      var order = new Rickshaw.Graph.Behavior.Series.Order({
+        graph: graph,
+        legend: legend
+      });
+      var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
+        graph: graph,
+        legend: legend
+      });
+      var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+        graph: graph
+      } );
+      var axes = new Rickshaw.Graph.Axis.Time( {
+        graph: graph
+      } );
+
+      graph.render();
+
+
+    script(type='text/javascript')
+      var source = new EventSource('/update');
+      var last_render = new Date().getTime() / 1000;
+      var counter_2 = 0;
+      var counter_3 = 0;
+      var counter_4 = 0;
+      var counter_5 = 0;
+ 
+      source.addEventListener('message', function(e) {
+        console.log(e);
+        var data = JSON.parse(e.data);
+
+        if(data.status.match(/^2/)){
+          counter_2++;
+        } else if(data.status.match(/^3/)){
+          counter_3++;
+        } else if(data.status.match(/^4/)){
+          counter_4++;
+        } else if(data.status.match(/^5/)){
+          counter_5++;
+        };
+        var now = new Date().getTime() / 1000;
+        if(now > last_render + tv){
+          var data = {
+            "2xx": counter_2,
+            "3xx": counter_3,
+            "4xx": counter_4,
+            "5xx": counter_5
+          };
+          counter_2 = 0;
+          counter_3 = 0;
+          counter_4 = 0;
+          counter_5 = 0;
+          last_render = now;
+
+          graph.series.addData(data);
+          graph.render();
+          axes.render();
+        }
+
+      }, false);
+
+
+
