@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "node app",
-    "devserver": "./node_modules/node-dev/node-dev app.js"
+    "devserver": "./node_modules/node-dev/node-dev app.js",
     "generate_data": "node generate_data.js"
   },
   "dependencies": {

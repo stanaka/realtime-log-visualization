@@ -32,7 +32,7 @@ var db = mongoose.connect(uri, mongoOptions, function (err, res){
     var genStatus = function(){
       x = Date.now() / 1000 / 100;
       r = Math.random();
-      threshold = 0.7 + Math.sin(x) / 5.0;
+      threshold = 0.9 + Math.sin(x) / 10.0;
       if(r < threshold){
         return 200;
       } else if(r < threshold + 0.1){
@@ -55,7 +55,7 @@ var db = mongoose.connect(uri, mongoOptions, function (err, res){
           console.log("Error:"+err);
         }
       });
-    }, 500);
+    }, 200);
   }
 });
 

@@ -24,12 +24,12 @@ exports.update = function(req, res) {
       messageCount++;
       console.log(messageCount + '/' + doc.time);
       res.write('id: ' + messageCount + '\n');
-      var msg = "{" +
-        '"status":"' + doc.status + '",' +
-        '"taken":"' + doc.taken + '",' +
-        '"path":"' + doc.ridgedispatch + '",' +
-        '"req":"' + doc.req + '"}';
-      res.write("data: "+msg+"\n\n"); // Note the extra newline
+      var msg = JSON.stringify({
+        status: doc.status,
+        taken:  doc.taken,
+        req:    doc.req
+      });
+      res.write("data: "+msg+"\n\n");
     });
 
     stream.on('close', function(){

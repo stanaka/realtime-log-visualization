@@ -25,13 +25,13 @@ html
         renderer: 'area',
         stroke: true,
         series: new Rickshaw.Series.FixedDuration([{
-          name: '2xx', color: palette.color()
-        },{
-          name: '3xx', color: palette.color()
+          name: '5xx', color: palette.color()
         },{
           name: '4xx', color: palette.color()
         },{
-          name: '5xx', color: palette.color()
+          name: '3xx', color: palette.color()
+        },{
+          name: '2xx', color: palette.color()
         }], undefined, {
           timeInterval: tv * 1000,
           maxDataPoints: 100,
@@ -77,21 +77,19 @@ html
       var counter = new Array();
  
       source.addEventListener('message', function(e) {
-        console.log(e);
         var data = JSON.parse(e.data);
 
-        if(found = (data.status.match(/^(\d)/))[0]){
-          counter[found] = counter[found] == null ? 0 : counter[found] + 1;
+        if(s = (data.status.match(/^(\d)/))[0]){
+          counter[s] = counter[s] == null ? 0 : counter[s] + 1;
         };
         var now = new Date().getTime() / 1000;
         if(now > last_render + tv){
           var data = {
-            "2xx": counter[2],
-            "3xx": counter[3],
-            "4xx": counter[4],
-            "5xx": counter[5]
+            "2xx": counter[2] / tv,
+            "3xx": counter[3] / tv,
+            "4xx": counter[4] / tv,
+            "5xx": counter[5] / tv
           };
-          console.log(counter);
           counter = new Array();
           last_render = now;
 
